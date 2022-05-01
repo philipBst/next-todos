@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { Home, SignIn } from "../components";
 
-const Home: NextPage = () => {
-  return <div className="flex w-full p-0"></div>;
+const Root: NextPage = () => {
+  const { data: session } = useSession();
+  return session ? <Home /> : <SignIn />;
 };
 
-export default Home;
+export default Root;
