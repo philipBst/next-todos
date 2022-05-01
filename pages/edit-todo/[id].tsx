@@ -1,19 +1,45 @@
-import { useState } from "react";
-import { useCallback } from "react";
-import { FormEvent } from "react";
+import { Todo } from "@prisma/client";
+import { GetServerSideProps, NextPage } from "next";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState, useEffect, useCallback, FormEvent } from "react";
+
 import { Header } from "../../components";
-import { postTodo } from "../../services/TodoService";
+import TodoResolver from "../../resolvers/TodoResolver";
+import { updateTodo } from "../../services/TodoService";
 
-const CreateTodo = () => {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+export type EditTodoProps = {
+  todo: Todo | null;
+};
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    await postTodo({ title, content: description });
-    setTitle("");
-    setDescription("");
-  };
+const EditTodo: NextPage<EditTodoProps> = ({ todo }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (todo) {
+      setTitle(todo.title);
+      setDescription(todo.content || "");
+    }
+  }, [todo]);
+
+  if (!todo) {
+    router.push("/");
+  }
+
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      updateTodo({
+        id: todo!.id,
+        title,
+        content: description,
+      });
+    },
+    [todo, title, description]
+  );
 
   const handleTitleChange = useCallback((e: FormEvent) => {
     setTitle((e.target as HTMLInputElement).value);
@@ -22,7 +48,6 @@ const CreateTodo = () => {
   const handleDescriptionChange = useCallback((e: FormEvent) => {
     setDescription((e.target as HTMLInputElement).value);
   }, []);
-
   return (
     <>
       <Header />
@@ -58,7 +83,7 @@ const CreateTodo = () => {
                 type="submit"
                 className="max-w-max bg-green-500 p-2 focus:outline-none"
               >
-                Add Todo
+                Save Changes
               </button>
             </div>
           </form>
@@ -68,4 +93,30 @@ const CreateTodo = () => {
   );
 };
 
-export default CreateTodo;
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  params,
+}) => {
+  const session = await getSession({ req });
+  if (session) {
+    const todo = await TodoResolver.getTodo(String(params?.id));
+    if (todo) {
+      return {
+        props: {
+          todo: {
+            ...todo,
+            createdAt: todo.createdAt.toISOString(),
+            updatedAt: todo.updatedAt.toISOString(),
+          },
+        },
+      };
+    }
+  }
+  return {
+    props: {
+      todo: null,
+    },
+  };
+};
+
+export default EditTodo;

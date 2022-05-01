@@ -21,22 +21,38 @@ export class TodoResolver {
     }
   }
 
+  async getTodo(id: Optional<string>) {
+    if (id) {
+      return await prisma.todo.findUnique({
+        where: {
+          id,
+        },
+      });
+    }
+  }
+
   async createTodo(todo: Todo) {
     return await prisma.todo.create({
-      data: {
-        ...todo,
-        createdAt: Date.now().toString(),
-        updatedAt: Date.now().toString(),
-      },
+      data: todo,
     });
   }
 
   async updateTodo(id: string, todo: Todo) {
-    return await prisma.todo.update({
+    if (id) {
+      return await prisma.todo.update({
+        where: {
+          id,
+        },
+        data: todo,
+      });
+    }
+  }
+
+  async deleteTodo(id: string) {
+    return await prisma.todo.delete({
       where: {
         id,
       },
-      data: todo,
     });
   }
 }
