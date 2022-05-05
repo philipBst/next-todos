@@ -25,7 +25,6 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const session = await getSession({ req });
-  console.log(req.method);
   if (session) {
     if (req.method === "POST") {
       const user = await UserResolver.getUser(session.user?.email || "");
