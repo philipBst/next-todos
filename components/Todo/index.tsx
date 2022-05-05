@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useTodoContext } from "../../hooks/use-todo-context";
 import { deleteTodo } from "../../services/TodoService";
 
 import DeleteIcon from "../DeleteIcon";
@@ -16,6 +17,8 @@ const Todo = ({ todo }: TodoProps) => {
   const [data, setData] = useState(() => todo);
   const router = useRouter();
 
+  const { deleteTodoOfID } = useTodoContext();
+
   useEffect(() => {
     setData(todo);
   }, [todo]);
@@ -26,11 +29,7 @@ const Todo = ({ todo }: TodoProps) => {
 
   const handleDeleteTodo = async () => {
     await deleteTodo(todo.id);
-    setData((prev) => ({
-      ...prev,
-      content: "",
-      title: "",
-    }));
+    deleteTodoOfID(todo.id);
   };
 
   return (

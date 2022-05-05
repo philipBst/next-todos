@@ -26,8 +26,7 @@ export const updateTodo = async (todo: TodoPayload & { id: string }) => {
 };
 
 export const deleteTodo = async (id: string) => {
-  const response = await fetch(`http://localhost:3000/api/todos/${id}`, {
+  return await fetch(`http://localhost:3000/api/todos/${id}`, {
     method: "DELETE",
   });
-  return await response.json();
 };
