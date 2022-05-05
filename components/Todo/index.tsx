@@ -1,6 +1,8 @@
 import { Todo } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useState } from "react";
 import { deleteTodo } from "../../services/TodoService";
 
 import DeleteIcon from "../DeleteIcon";
@@ -11,18 +13,30 @@ export type TodoProps = {
 };
 
 const Todo = ({ todo }: TodoProps) => {
+  const [data, setData] = useState(() => todo);
   const router = useRouter();
+
+  useEffect(() => {
+    setData(todo);
+  }, [todo]);
+
   const handleEditTodo = () => {
     router.push(`/edit-todo/${todo.id}`);
   };
+
   const handleDeleteTodo = async () => {
     await deleteTodo(todo.id);
-    router.push("/");
+    setData((prev) => ({
+      ...prev,
+      content: "",
+      title: "",
+    }));
   };
+
   return (
     <div className=" flex w-[500px] items-center justify-between py-3 last:border-none odd:border-b-2 odd:border-b-gray-600 even:border-b-2 even:border-b-gray-600">
       <span className="capitalize">
-        <Link href={`/todos/${todo.id}`}>{todo.title}</Link>
+        <Link href={`/todos/${data.id}`}>{data.title}</Link>
       </span>
       <aside className="flex items-center justify-between gap-8">
         <EditIcon

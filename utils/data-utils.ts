@@ -1,11 +1,19 @@
 import { EmptyArray } from "../types/utility-types";
 
-export const isArray = <T>(value: T | T[]): value is T[] =>
-  Array.isArray(value);
+export function isArray<T>(value: T | T[]): value is T[] {
+  return Array.isArray(value);
+}
 
-export const isEmptyArray = <T>(
+export function isEmptyArray<T>(
   value: T[] | EmptyArray<T>
-): value is EmptyArray<T> => Boolean(value.length);
+): value is EmptyArray<T> {
+  return Boolean(value.length);
+}
 
-export const isLastItemOfArray = <T>(arr: T[], index: number) =>
-  arr.length === index - 1;
+export function isLastItemOfArray<T>(arr: T[], index: number): boolean {
+  return arr.length === index - 1;
+}
+
+export function not<T>(value: T | boolean): value is boolean {
+  return !value;
+}

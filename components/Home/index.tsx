@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Header from "../Header";
-import { signOut } from "next-auth/react";
 import { useQuery } from "react-query";
 import Hero from "../Hero";
 
