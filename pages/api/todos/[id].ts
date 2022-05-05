@@ -1,6 +1,7 @@
 import { Todo } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
+import cuid from "cuid";
 import TodoResolver from "../../../resolvers/TodoResolver";
 import UserResolver from "../../../resolvers/UserResolver";
 
@@ -32,7 +33,7 @@ export default async function handler(
         const todo: Todo = {
           ...req.body,
           authorId: user.id,
-          id: String(Math.random() * 100000),
+          id: cuid(),
           createdAt: new Date(),
           updatedAt: new Date(),
         };
@@ -50,7 +51,6 @@ export default async function handler(
       await TodoResolver.deleteTodo(String(req.query.id));
       res.status(200).json("deleted");
     } else if (req.method === "PUT") {
-      console.log("put request");
       await TodoResolver.updateTodo(req.body.id, req.body);
       res.status(200).json("updated");
     }
