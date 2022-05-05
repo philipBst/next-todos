@@ -2,17 +2,39 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, install all the dependecies using yar or npm:
+
+```bash
+npm install
+# or
+yarn
+```
+
+## Update Prisma for DB migration
+
+Make sure to have mysql server running and update the DATABASE_URL in your .env file with correct user, password and db name
+
+```bash
+DATABASE_URL="mysql://your_user_name:your_user_password@localhost:3306/name_of_your_database"
+```
+
+Then migrate your DB with following command
+
+```bash
+npx prisma migrate dev --name init
+```
+
+## Start your local server
+
+Start your server with following command
 
 ```bash
 npm run dev
-# or
+#or
 yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
