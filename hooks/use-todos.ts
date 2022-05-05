@@ -4,6 +4,7 @@ import { Todo } from "@prisma/client";
 import { useEffect } from "react";
 import { useState } from "react";
 import { isEmptyArray, not } from "../utils/data-utils";
+import { useCallback } from "react";
 
 export type UseTodosProps = {
   todos: Todo[];
@@ -20,12 +21,19 @@ export function useTodos({ todos }: UseTodosProps) {
     }
   }, [todos]);
 
-  function toHomePage() {
-    router.push("/");
-  }
-  function toEditTodoPage(id: string | number) {
-    router.push(`/edit-todo/${id}`);
-  }
+  const toHomePage = useCallback(
+    function () {
+      router.push("/");
+    },
+    [router]
+  );
+
+  const toEditTodoPage = useCallback(
+    function (id: string | number) {
+      router.push(`/edit-todo/${id}`);
+    },
+    [router]
+  );
 
   return { data, session, router, toHomePage, toEditTodoPage };
 }
