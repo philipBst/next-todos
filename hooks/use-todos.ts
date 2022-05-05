@@ -12,7 +12,9 @@ export type UseTodosProps = {
 
 export function useTodos({ todos }: UseTodosProps) {
   const [data, setData] = useState<Todo[]>([]);
+
   const { data: session } = useSession();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -21,15 +23,12 @@ export function useTodos({ todos }: UseTodosProps) {
     }
   }, [todos]);
 
-  const toHomePage = useCallback(
-    function () {
-      router.push("/");
-    },
-    [router]
-  );
+  const toHomePage = useCallback(() => {
+    router.push("/");
+  }, [router]);
 
   const toEditTodoPage = useCallback(
-    function (id: string | number) {
+    (id: string | number) => {
       router.push(`/edit-todo/${id}`);
     },
     [router]
