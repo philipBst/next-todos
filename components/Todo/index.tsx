@@ -34,7 +34,7 @@ const Todo = ({ todo }: TodoProps) => {
   };
 
   return (
-    <div className=" flex w-[500px] items-center justify-between py-3 last:border-none odd:border-b-2 odd:border-b-gray-600 even:border-b-2 even:border-b-gray-600">
+    <div className="flex w-[500px] items-center justify-between py-3 last:border-none odd:border-b-2 odd:border-b-gray-600 even:border-b-2 even:border-b-gray-600">
       <span className="capitalize">
         <Link href={`/todos/${data.id}`}>{data.title}</Link>
       </span>
