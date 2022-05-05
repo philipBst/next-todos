@@ -14,14 +14,9 @@ export type TodoProps = {
 };
 
 const Todo = ({ todo }: TodoProps) => {
-  const [data, setData] = useState(() => todo);
   const router = useRouter();
 
   const { deleteTodoOfID } = useTodoContext();
-
-  useEffect(() => {
-    setData(todo);
-  }, [todo]);
 
   const handleEditTodo = () => {
     router.push(`/edit-todo/${todo.id}`);
@@ -35,7 +30,7 @@ const Todo = ({ todo }: TodoProps) => {
   return (
     <div className="flex w-[500px] items-center justify-between py-3 last:border-none odd:border-b-2 odd:border-b-gray-600 even:border-b-2 even:border-b-gray-600">
       <span className="capitalize">
-        <Link href={`/todos/${data.id}`}>{data.title}</Link>
+        <Link href={`/todos/${todo.id}`}>{todo.title}</Link>
       </span>
       <aside className="flex items-center justify-between gap-8">
         <EditIcon
